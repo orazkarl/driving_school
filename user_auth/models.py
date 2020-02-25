@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MaxValueValidator
-from landing.models import School, Group, DrivingCategories
+from landing.models import School, Group, DrivingCategories, Lesson
 from driving_school import settings
 
 
@@ -57,4 +57,14 @@ class Department_IA(User):
         verbose_name = 'ГАИ/УВД'
         verbose_name_plural = 'ГАИ/УВД'
 
+
+
+class Grading(models.Model):
+    # user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, primary_key=True)
+    student = models.ForeignKey(Student, null=True, blank=True, on_delete=models.SET_NULL)
+    schools = models.ForeignKey(School, null=True, blank=True, on_delete=models.SET_NULL)
+    group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.SET_NULL)
+    lesson = models.ForeignKey(Lesson, null=True, blank=True, on_delete=models.SET_NULL)
+    date_of_grade = models.DateField('Дата', null=True, blank=True)
+    grade = models.PositiveIntegerField('Оценка', null=True, blank=True)
 

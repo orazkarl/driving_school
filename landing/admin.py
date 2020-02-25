@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import School, Group, DrivingCategories, Lesson, Grading
+from .models import School, Group, DrivingCategories, Lesson
 from user_auth.models import Student, User, Teacher, Department_IA
 
 
@@ -24,14 +24,52 @@ class GroupAdmin(admin.ModelAdmin):
 class DrivingCategoriesAdmin(admin.ModelAdmin):
     list_display = ['id', 'name']
 
+
+
     def has_module_permission(self, request, obj=None):
         if not Student.objects.filter(username=request.user.username):
             return True
+
+    def has_change_permission(self, request, obj=None):
+        if not Student.objects.filter(username=request.user.username):
+            return True
+
+    def has_add_permission(self, request, obj=None):
+        if not Student.objects.filter(username=request.user.username):
+            return True
+
+    def has_delete_permission(self, request, obj=None):
+        if not Student.objects.filter(username=request.user.username):
+            return True
+
+
 @admin.register(Lesson)
 class LessonAdmin(admin.ModelAdmin):
     list_display = ['name', 'schools', 'group', 'date_of_lesson', 'time_of_lesson']
 
-@admin.register(Grading)
-class GradingAdmin(admin.ModelAdmin):
-    list_display = ['user', 'lesson', 'grade', 'date_of_grade']
+    def get_queryset(self, request):
+        query_set = Lesson.objects.all()
+        if Student.objects.filter(username=request.user.username):
+            if Student.objects.filter(group=request.user.student.group):
+                query_set = Lesson.objects.filter(group = request.user.student.group)
+                return query_set
+        return query_set
+    def has_module_permission(self, request, obj=None):
+        return True
 
+    def has_change_permission(self, request, obj=None):
+        if not Student.objects.filter(username=request.user.username):
+            return True
+
+    def has_add_permission(self, request, obj=None):
+        if not Student.objects.filter(username=request.user.username):
+            return True
+
+    def has_delete_permission(self, request, obj=None):
+        if not Student.objects.filter(username=request.user.username):
+            return True
+
+# @admin.register(Grading)
+# class GradingAdmin(admin.ModelAdmin):
+#     list_display = ['user',  'grade', 'date_of_grade']
+#

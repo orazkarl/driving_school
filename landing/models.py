@@ -1,6 +1,6 @@
 from django.db import models
 from django.core.validators import MaxValueValidator
-# from user_auth.models import Student
+# from .admin import Student
 from driving_school import settings
 
 # Create your models here.
@@ -40,12 +40,14 @@ class Lesson(models.Model):
     time_of_lesson = models.TimeField('Время', null=True, blank=True, default='09:00')
 
     def __str__(self):
-        return  (self.name)
+        return 'Урок - "{}"'.format(self.name)
 
-class Grading(models.Model):
-    schools = models.ForeignKey(School, null=True, blank=True, on_delete=models.SET_NULL)
-    group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.SET_NULL)
-    lesson = models.ForeignKey(Lesson, null=True, blank=True, on_delete=models.SET_NULL)
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, primary_key=True)
-    date_of_grade = models.DateField('Дата', null=True, blank=True)
-    grade = models.PositiveIntegerField('Оценка', null=True, blank=True)
+# class Grading(models.Model):
+#     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, primary_key=True)
+#     # student = models.ForeignKey(Student, null=True, blank=True, on_delete=models.SET_NULL)
+#     schools = models.ForeignKey(School, null=True, blank=True, on_delete=models.SET_NULL)
+#     group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.SET_NULL)
+#     lesson = models.ForeignKey(Lesson, null=True, blank=True, on_delete=models.SET_NULL)
+#     date_of_grade = models.DateField('Дата', null=True, blank=True)
+#     grade = models.PositiveIntegerField('Оценка', null=True, blank=True)
+#
