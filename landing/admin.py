@@ -8,7 +8,8 @@ class SchoolAdmin(admin.ModelAdmin):
     list_display = ['name', 'address', 'is_active']
 
     def has_module_permission(self, request, obj=None):
-        if not Student.objects.filter(username=request.user.username):
+        if not Student.objects.filter(username=request.user.username) and not Teacher.objects.filter(
+                username=request.user.username) and not Department_IA.objects.filter(username=request.user.username):
             return True
 
 
@@ -17,17 +18,18 @@ class GroupAdmin(admin.ModelAdmin):
     list_display = ['name', 'schools', 'is_active']
 
     def has_module_permission(self, request, obj=None):
-        if not Student.objects.filter(username=request.user.username):
+        if not Student.objects.filter(username=request.user.username) and not Department_IA.objects.filter(
+                username=request.user.username):
             return True
+
 
 @admin.register(DrivingCategories)
 class DrivingCategoriesAdmin(admin.ModelAdmin):
     list_display = ['id', 'name']
 
-
-
     def has_module_permission(self, request, obj=None):
-        if not Student.objects.filter(username=request.user.username):
+        if not Student.objects.filter(username=request.user.username) and not Teacher.objects.filter(
+                username=request.user.username) and not Department_IA.objects.filter(username=request.user.username):
             return True
 
     def has_change_permission(self, request, obj=None):
@@ -51,11 +53,13 @@ class LessonAdmin(admin.ModelAdmin):
         query_set = Lesson.objects.all()
         if Student.objects.filter(username=request.user.username):
             if Student.objects.filter(group=request.user.student.group):
-                query_set = Lesson.objects.filter(group = request.user.student.group)
+                query_set = Lesson.objects.filter(group=request.user.student.group)
                 return query_set
         return query_set
+
     def has_module_permission(self, request, obj=None):
-        return True
+        if not Department_IA.objects.filter(username=request.user.username):
+            return True
 
     def has_change_permission(self, request, obj=None):
         if not Student.objects.filter(username=request.user.username):
@@ -68,8 +72,3 @@ class LessonAdmin(admin.ModelAdmin):
     def has_delete_permission(self, request, obj=None):
         if not Student.objects.filter(username=request.user.username):
             return True
-
-# @admin.register(Grading)
-# class GradingAdmin(admin.ModelAdmin):
-#     list_display = ['user',  'grade', 'date_of_grade']
-#

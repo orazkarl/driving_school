@@ -68,3 +68,7 @@ class Grading(models.Model):
     date_of_grade = models.DateField('Дата', null=True, blank=True)
     grade = models.PositiveIntegerField('Оценка', null=True, blank=True)
 
+    class Meta:
+        verbose_name = 'Оценки'
+        verbose_name_plural = 'Оценки'
+

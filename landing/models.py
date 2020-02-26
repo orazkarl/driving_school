@@ -13,6 +13,10 @@ class School(models.Model):
     def __str__(self):
         return 'Школа "{}"'.format(self.name)
 
+    class Meta:
+        verbose_name = 'Учебные заведения'
+        verbose_name_plural = 'Учебные заведения'
+
 
 class Group(models.Model):
     name = models.CharField('Название', max_length=100, null=True, blank=True)
@@ -22,8 +26,10 @@ class Group(models.Model):
     def __str__(self):
         return 'Группа "{}"'.format(self.name)
 
-    def get_group(self):
-        return self.objects.all()
+
+    class Meta:
+        verbose_name = 'Учебные классы'
+        verbose_name_plural = 'Учебные классы'
 
 class DrivingCategories(models.Model):
     name = models.CharField('Название', max_length=100, null=True, blank=True)
@@ -31,6 +37,9 @@ class DrivingCategories(models.Model):
     def __str__(self):
         return 'Категоия - "{}"'.format(self.name)
 
+    class Meta:
+        verbose_name = 'Водительские категории'
+        verbose_name_plural = 'Водительские категории'
 
 class Lesson(models.Model):
     name  = models.CharField('Тема занятия', max_length=100, null=True, blank=True)
@@ -42,12 +51,6 @@ class Lesson(models.Model):
     def __str__(self):
         return 'Урок - "{}"'.format(self.name)
 
-# class Grading(models.Model):
-#     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, primary_key=True)
-#     # student = models.ForeignKey(Student, null=True, blank=True, on_delete=models.SET_NULL)
-#     schools = models.ForeignKey(School, null=True, blank=True, on_delete=models.SET_NULL)
-#     group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.SET_NULL)
-#     lesson = models.ForeignKey(Lesson, null=True, blank=True, on_delete=models.SET_NULL)
-#     date_of_grade = models.DateField('Дата', null=True, blank=True)
-#     grade = models.PositiveIntegerField('Оценка', null=True, blank=True)
-#
+    class Meta:
+        verbose_name = 'Занятия'
+        verbose_name_plural = 'Занятия'
