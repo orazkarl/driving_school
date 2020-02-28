@@ -2,6 +2,9 @@ from django.db import models
 from django.core.validators import MaxValueValidator
 # from .admin import Student
 from driving_school import settings
+from django.core.exceptions import ValidationError
+from django.contrib import messages
+
 
 # Create your models here.
 
@@ -20,11 +23,13 @@ class School(models.Model):
 
 class Group(models.Model):
     name = models.CharField('Название', max_length=100, null=True, blank=True)
-    schools = models.ForeignKey(School, null=True, blank=True, on_delete=models.SET_NULL)
+    schools = models.ForeignKey(School, on_delete=models.SET_NULL, null=True, blank=True)
     is_active = models.BooleanField('Активность', default=False)
 
     def __str__(self):
-        return 'Группа "{}"'.format(self.name)
+        return 'Группа "{}" -  "{}"'.format(self.name, self.schools)
+
+
 
 
     class Meta:
@@ -51,6 +56,9 @@ class Lesson(models.Model):
     def __str__(self):
         return 'Урок - "{}"'.format(self.name)
 
+    def save(self, *args, **kwargs):
+        self.schools = self.group.schools
+        super().save(*args, **kwargs)
     class Meta:
         verbose_name = 'Занятия'
         verbose_name_plural = 'Занятия'

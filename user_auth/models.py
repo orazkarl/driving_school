@@ -36,6 +36,16 @@ class Teacher(User):
         verbose_name_plural = 'Учителя'
 
 
+class StudentFile(models.Model):
+    file = models.FileField(null=True, blank=True)
+    title_file = models.CharField('Названия документа', null=True, blank=True, max_length=150)
+
+    def __str__(self):
+        return '%s, %s' % (self.file, self.title_file)
+
+
+
+FOLDER_FILES_PATH = 'static'
 class Student(User):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, primary_key=True)
     group = models.ForeignKey(Group, blank=True, null=True, on_delete=models.CASCADE)
@@ -45,7 +55,22 @@ class Student(User):
                                        verbose_name='Изучаемая категория', related_name='study_category')
     start_training = models.DateField('Начало обучение', null=True)
     graduation_training = models.DateField('Окончание обучение', null=True)
+    # file = models.ForeignKey(StudentFile, null=True,blank=True, on_delete=models.CASCADE)
+    file = models.FileField(null=True, blank=True, upload_to=FOLDER_FILES_PATH)
+    title_file = models.CharField('Названия документа', null=True, blank=True, max_length=150)
 
+    # def file_link(self):
+    #     print(self.file.open())
+    #     if self.file:
+    #         return "<a href='%s'>download</a>" % (self.file.url)
+    #     else:
+    #         return "No attachment"
+
+    # file_link.allow_tags = True
+    def save(self, *args, **kwargs):
+        if self.group:
+            self.school = self.group.schools
+        super().save(*args, **kwargs)
     class Meta:
         verbose_name = 'Учащиеся'
         verbose_name_plural = 'Учащиеся'
@@ -62,9 +87,10 @@ class Department_IA(User):
 class Grading(models.Model):
     # user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, primary_key=True)
     student = models.ForeignKey(Student, null=True, blank=True, on_delete=models.SET_NULL)
-    schools = models.ForeignKey(School, null=True, blank=True, on_delete=models.SET_NULL)
-    group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.SET_NULL)
-    lesson = models.ForeignKey(Lesson, null=True, blank=True, on_delete=models.SET_NULL)
+    # schools = models.ForeignKey(School, null=True, blank=True, on_delete=models.SET_NULL)
+    # group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.SET_NULL)
+    # lesson = models.ForeignKey(Lesson, null=True, blank=True, on_delete=models.SET_NULL)
+    lesson_name = models.CharField('Дисциплина', blank=True, null=True, max_length=150)
     date_of_grade = models.DateField('Дата', null=True, blank=True)
     grade = models.PositiveIntegerField('Оценка', null=True, blank=True)
 

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User, Student, Teacher, Department_IA, Grading
+from .models import User, Student, Teacher, Department_IA, Grading, StudentFile
 from django.contrib.auth.admin import UserAdmin
 
 admin.site.site_header = 'ALDIYAR-AVTO'
@@ -37,18 +37,27 @@ class StudentAdmin(UserAdmin):
         'graduation_training',
         'address',
         'number_phone',
-        'school')
-    list_filter = ['study_category','category']
+        'school',
+        'group',
+        'file',
+        'title_file',
+
+    )
+    list_filter = ['study_category', 'category']
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
         (('Personal info'), {'fields': (
-            'username', 'first_name', 'last_name', 'id_passport', 'address', 'number_phone', 'school', 'group',
+            'username', 'first_name', 'last_name', 'id_passport', 'address', 'number_phone', 'group',
             'category',
             'study_category', 'start_training',
-            'graduation_training',)}),
+            'graduation_training', 'file',
+            'title_file')}),
         (('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser')}),
 
     )
+
+
+
 
     def get_queryset(self, request):
         query_set = Student.objects.all()
@@ -104,9 +113,11 @@ class TeacherAdmin(UserAdmin):
         if not Student.objects.filter(username=request.user.username) and not Department_IA.objects.filter(
                 username=request.user.username) and not Teacher.objects.filter(username=request.user.username):
             return True
+
     def has_change_permission(self, request, obj=None):
         if not Department_IA.objects.filter(username=request.user.username):
             return True
+
 
 @admin.register(Department_IA)
 class DepartmentAdmin(UserAdmin):
@@ -141,14 +152,16 @@ class DepartmentAdmin(UserAdmin):
         if not Student.objects.filter(username=request.user.username) and not Department_IA.objects.filter(
                 username=request.user.username) and not Teacher.objects.filter(username=request.user.username):
             return True
+
     def has_change_permission(self, request, obj=None):
-        if not Student.objects.filter(username=request.user.username) and not Teacher.objects.filter(username=request.user.username):
+        if not Student.objects.filter(username=request.user.username) and not Teacher.objects.filter(
+                username=request.user.username):
             return True
 
 
 @admin.register(Grading)
 class GradingAdmin(admin.ModelAdmin):
-    list_display = ('student', 'lesson', 'grade', 'date_of_grade')
+    list_display = ('student', 'lesson_name', 'grade', 'date_of_grade')
 
     def get_queryset(self, request):
         query_set = Grading.objects.all()
@@ -160,6 +173,7 @@ class GradingAdmin(admin.ModelAdmin):
     def has_module_permission(self, request):
         if not Department_IA.objects.filter(username=request.user.username):
             return True
+
     def has_change_permission(self, request, obj=None):
         if not Student.objects.filter(username=request.user.username):
             return True
@@ -173,9 +187,13 @@ class GradingAdmin(admin.ModelAdmin):
             return True
 
 
+# @admin.register(StudentFile)
+# class StudentFileAdmin(admin.ModelAdmin):
+#     list_display = ['file', 'title_file']
+
+
 from django.contrib.auth.models import Group
 
 admin.site.unregister(Group)
 # from django.contrib.admin.models import LogEntry
 # LogEntry.objects.all().delete()
-

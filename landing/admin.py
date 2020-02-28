@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.forms import forms
 from .models import School, Group, DrivingCategories, Lesson
 from user_auth.models import Student, User, Teacher, Department_IA
 
@@ -21,6 +22,7 @@ class GroupAdmin(admin.ModelAdmin):
         if not Student.objects.filter(username=request.user.username) and not Department_IA.objects.filter(
                 username=request.user.username):
             return True
+
 
 
 @admin.register(DrivingCategories)
@@ -48,6 +50,20 @@ class DrivingCategoriesAdmin(admin.ModelAdmin):
 @admin.register(Lesson)
 class LessonAdmin(admin.ModelAdmin):
     list_display = ['name', 'schools', 'group', 'date_of_lesson', 'time_of_lesson']
+    fieldsets = (
+        (None, {'fields': ('name', 'group', 'date_of_lesson', 'time_of_lesson')}),
+    )
+    # def save_model(self, request, obj, form, change):
+        # if not self.group.schools == self.schools:
+        #     print(1)
+        #     raise forms.ValidationError('Существует инстанс модели с некоторыми параметрами!')
+        # super().save_model(request, obj, form, change)
+    # def save_formset(self, request, form, formset, change):
+    #     instances = formset.save(commit=False)
+    #     for instance in instances:
+    #         if not self.group.schools == self.schools:
+    #             raise forms.ValidationError('Существует инстанс модели с некоторыми параметрами!')
+
 
     def get_queryset(self, request):
         query_set = Lesson.objects.all()
