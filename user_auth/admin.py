@@ -176,6 +176,6 @@ class GradingAdmin(admin.ModelAdmin):
 from django.contrib.auth.models import Group
 
 admin.site.unregister(Group)
-from django.contrib.admin.models import LogEntry
-LogEntry.objects.all().delete()
+# from django.contrib.admin.models import LogEntry
+# LogEntry.objects.all().delete()
 
