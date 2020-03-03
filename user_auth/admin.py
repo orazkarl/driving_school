@@ -57,6 +57,11 @@ class StudentAdmin(UserAdmin):
     )
 
 
+    # def save_model(self, request, obj, form, change):
+    #     obj.save()
+    #
+    #     for afile in request.FILES.getlist('photos_multiple'):
+    #         obj.
 
 
     def get_queryset(self, request):

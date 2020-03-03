@@ -56,7 +56,7 @@ class Student(User):
     start_training = models.DateField('Начало обучение', null=True)
     graduation_training = models.DateField('Окончание обучение', null=True)
     # file = models.ForeignKey(StudentFile, null=True,blank=True, on_delete=models.CASCADE)
-    file = models.FileField(null=True, blank=True, upload_to=FOLDER_FILES_PATH)
+    file = models.FileField(null=True, blank=True, default='default_post_image.jpg', upload_to='media/', )
     title_file = models.CharField('Названия документа', null=True, blank=True, max_length=150)
 
     # def file_link(self):
