@@ -14,7 +14,7 @@ class UserAdmin(UserAdmin):
             'number_phone',
             'school')}),
         (('Права доступа'), {'fields': ('is_active', 'is_staff', 'is_superuser',
-                                      )}),
+                                        )}),
 
     )
 
@@ -33,51 +33,10 @@ class UserAdmin(UserAdmin):
 class StudentFileAdmin(admin.StackedInline):
     model = StudentFile
 
-@admin.register(Student)
-class StudentAdmin(UserAdmin):
-    inlines = [StudentFileAdmin]
-    list_display = (
-        'username', 'email', 'first_name', 'last_name', 'dob', 'category', 'study_category', 'start_training',
-        'graduation_training',
-        'address',
-        'number_phone',
-        'school',
-        'group',
-
-
-    )
-    list_filter = ['study_category', 'category', 'school', 'group']
-    fieldsets = (
-        (None, {'fields': ('email', 'password')}),
-        (('Личная информация'), {'fields': (
-            'username', 'first_name', 'last_name', 'id_passport', 'address', 'number_phone', 'group',
-            'category',
-            'study_category', 'start_training',
-            'graduation_training')}),
-        (('Права доступа'), {'fields': ('is_active', 'is_staff', 'is_superuser')}),
-    )
-
-
-    # def save_model(self, request, obj, form, change):
-    #     obj.save()
-    #
-    #     for afile in request.FILES.getlist('photos_multiple'):
-    #         obj.
-
-
-    def get_queryset(self, request):
-        query_set = Student.objects.all()
-        if Student.objects.filter(username=request.user.username):
-            query_set = Student.objects.filter(username=request.user.username)
-            return query_set
-        return query_set
-
-    def has_module_permission(self, request, obj=None):
-        return True
-
     def has_change_permission(self, request, obj=None):
         if not Student.objects.filter(username=request.user.username) and not Department_IA.objects.filter(
                 username=request.user.username):
+
             return True
 
     def has_add_permission(self, request, obj=None):
@@ -90,6 +49,61 @@ class StudentAdmin(UserAdmin):
                 username=request.user.username):
             return True
 
+
+@admin.register(Student)
+class StudentAdmin(UserAdmin):
+    inlines = [StudentFileAdmin]
+    list_display = (
+        'username', 'email', 'first_name', 'last_name', 'dob', 'category', 'study_category', 'start_training',
+        'graduation_training',
+        'address',
+        'number_phone',
+        'school',
+        'group',
+
+    )
+    # list_filter = ['study_category', 'category', 'school', 'group']
+    fieldsets = (
+        (None, {'fields': ('email', 'password')}),
+        (('Личная информация'), {'fields': (
+            'username', 'first_name', 'last_name', 'id_passport', 'address', 'number_phone', 'group',
+            'category',
+            'study_category', 'start_training',
+            'graduation_training')}),
+        (('Права доступа'), {'fields': ('is_active', 'is_staff', 'is_superuser')}),
+    )
+
+    def get_queryset(self, request):
+        query_set = Student.objects.all()
+        if Student.objects.filter(username=request.user.username):
+            query_set = Student.objects.filter(username=request.user.username)
+            return query_set
+        return query_set
+
+    def has_module_permission(self, request, obj=None):
+
+        return True
+
+    def has_change_permission(self, request, obj=None):
+        if not Student.objects.filter(username=request.user.username) and not Department_IA.objects.filter(
+                username=request.user.username):
+
+            return True
+
+    def has_add_permission(self, request, obj=None):
+        if not Student.objects.filter(username=request.user.username) and not Department_IA.objects.filter(
+                username=request.user.username):
+
+            return True
+
+    def has_delete_permission(self, request, obj=None):
+        if not Student.objects.filter(username=request.user.username) and not Department_IA.objects.filter(
+                username=request.user.username):
+
+            return True
+
+
+
 @admin.register(Teacher)
 class TeacherAdmin(UserAdmin):
     list_display = (
@@ -99,6 +113,7 @@ class TeacherAdmin(UserAdmin):
         'school')
 
     list_filter = ['school']
+
     def has_module_permission(self, request, obj=None):
         if not Student.objects.filter(username=request.user.username):
             return True
@@ -170,6 +185,7 @@ class GradingAdmin(admin.ModelAdmin):
     list_display = ('student', 'lesson_name', 'grade', 'date_of_grade')
 
     list_filter = ['lesson_name', 'student']
+
     def get_queryset(self, request):
         query_set = Grading.objects.all()
         if Student.objects.filter(username=request.user.username):
