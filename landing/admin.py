@@ -53,6 +53,7 @@ class LessonAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {'fields': ('name', 'group', 'date_of_lesson', 'time_of_lesson')}),
     )
+    list_filter = ['schools', 'group', 'date_of_lesson']
     # def save_model(self, request, obj, form, change):
         # if not self.group.schools == self.schools:
         #     print(1)

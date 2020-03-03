@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User, Student, Teacher, Department_IA, Grading, StudentFile
+from .models import User, Student, Teacher, Department_IA, Grading
 from django.contrib.auth.admin import UserAdmin
 
 admin.site.site_header = 'ALDIYAR-AVTO'
@@ -9,11 +9,11 @@ admin.site.site_header = 'ALDIYAR-AVTO'
 class UserAdmin(UserAdmin):
     fieldsets = (
         (None, {'fields': ('username', 'email', 'password')}),
-        (('Personal info'), {'fields': (
+        (('Личная информация'), {'fields': (
             'first_name', 'last_name', 'id_passport', 'number_passport', 'dob', 'place_of_birth', 'address',
             'number_phone',
             'school')}),
-        (('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser',
+        (('Права доступа'), {'fields': ('is_active', 'is_staff', 'is_superuser',
                                       )}),
 
     )
@@ -43,16 +43,16 @@ class StudentAdmin(UserAdmin):
         'title_file',
 
     )
-    list_filter = ['study_category', 'category']
+    list_filter = ['study_category', 'category', 'school', 'group']
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
-        (('Personal info'), {'fields': (
+        (('Личная информация'), {'fields': (
             'username', 'first_name', 'last_name', 'id_passport', 'address', 'number_phone', 'group',
             'category',
             'study_category', 'start_training',
             'graduation_training', 'file',
             'title_file')}),
-        (('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser')}),
+        (('Права доступа'), {'fields': ('is_active', 'is_staff', 'is_superuser')}),
 
     )
 
@@ -98,6 +98,7 @@ class TeacherAdmin(UserAdmin):
         'number_phone',
         'school')
 
+    list_filter = ['school']
     def has_module_permission(self, request, obj=None):
         if not Student.objects.filter(username=request.user.username):
             return True
@@ -130,9 +131,9 @@ class DepartmentAdmin(UserAdmin):
 
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
-        (('Personal info'), {'fields': (
+        (('Личная информация'), {'fields': (
             'username', 'first_name', 'address',)}),
-        (('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser')}),
+        (('Права доступа'), {'fields': ('is_active', 'is_staff', 'is_superuser')}),
 
     )
 
@@ -168,6 +169,7 @@ class DepartmentAdmin(UserAdmin):
 class GradingAdmin(admin.ModelAdmin):
     list_display = ('student', 'lesson_name', 'grade', 'date_of_grade')
 
+    list_filter = ['lesson_name', 'student']
     def get_queryset(self, request):
         query_set = Grading.objects.all()
         if Student.objects.filter(username=request.user.username):

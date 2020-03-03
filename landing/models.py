@@ -23,7 +23,7 @@ class School(models.Model):
 
 class Group(models.Model):
     name = models.CharField('Название', max_length=100, null=True, blank=True)
-    schools = models.ForeignKey(School, on_delete=models.SET_NULL, null=True, blank=True)
+    schools = models.ForeignKey(School, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Школа')
     is_active = models.BooleanField('Активность', default=False)
 
     def __str__(self):
@@ -48,8 +48,8 @@ class DrivingCategories(models.Model):
 
 class Lesson(models.Model):
     name  = models.CharField('Тема занятия', max_length=100, null=True, blank=True)
-    schools = models.ForeignKey(School, null=True, blank=True, on_delete=models.SET_NULL)
-    group =  models.ForeignKey(Group, null=True, blank=True, on_delete=models.SET_NULL)
+    schools = models.ForeignKey(School, null=True, blank=True, on_delete=models.SET_NULL, verbose_name='Школа')
+    group =  models.ForeignKey(Group, null=True, blank=True, on_delete=models.SET_NULL, verbose_name='Учебный класс')
     date_of_lesson = models.DateField('Дата урока', null=True, blank=True)
     time_of_lesson = models.TimeField('Время', null=True, blank=True, default='09:00')
 

@@ -16,7 +16,7 @@ class User(AbstractUser):
     place_of_birth = models.CharField('Место рождения', max_length=150, null=True, blank=True)
     address = models.CharField('Адрес', max_length=150, null=True, blank=True)
     number_phone = models.PositiveIntegerField('Номер телефона', null=True, blank=True)
-    school = models.ForeignKey(School, null=True, blank=True, on_delete=models.SET_NULL)
+    school = models.ForeignKey(School, null=True, blank=True, on_delete=models.SET_NULL, verbose_name='Школа')
     USER_TYPE_CHOICES = (
         ('T', 'Учитель'),
         ('S', 'Ученик'),
@@ -29,34 +29,34 @@ class User(AbstractUser):
 
 
 class Teacher(User):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, primary_key=True)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, primary_key=True, verbose_name='Учитель')
 
     class Meta:
         verbose_name = 'Учителя'
         verbose_name_plural = 'Учителя'
 
 
-class StudentFile(models.Model):
-    file = models.FileField(null=True, blank=True)
-    title_file = models.CharField('Названия документа', null=True, blank=True, max_length=150)
-
-    def __str__(self):
-        return '%s, %s' % (self.file, self.title_file)
+# class StudentFile(models.Model):
+#     file = models.FileField('Файл', null=True, blank=True)
+#     title_file = models.CharField('Названия документа', null=True, blank=True, max_length=150)
+#
+#     def __str__(self):
+#         return '%s, %s' % (self.file, self.title_file)
 
 
 
 FOLDER_FILES_PATH = 'static'
 class Student(User):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, primary_key=True)
-    group = models.ForeignKey(Group, blank=True, null=True, on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, blank=True, null=True, on_delete=models.CASCADE, verbose_name='Учебный класс')
     category = models.ForeignKey(DrivingCategories, blank=True, null=True, on_delete=models.CASCADE,
-                                  verbose_name='Категория', related_name='categoty')
+                                  verbose_name='Категория', related_name='category')
     study_category = models.ForeignKey(DrivingCategories, blank=True, null=True, on_delete=models.CASCADE,
                                        verbose_name='Изучаемая категория', related_name='study_category')
     start_training = models.DateField('Начало обучение', null=True)
     graduation_training = models.DateField('Окончание обучение', null=True)
     # file = models.ForeignKey(StudentFile, null=True,blank=True, on_delete=models.CASCADE)
-    file = models.FileField(null=True, blank=True, default='default_post_image.jpg', upload_to='media/', )
+    file = models.FileField('Документ',null=True, blank=True, default='default_post_image.jpg', upload_to='media/', )
     title_file = models.CharField('Названия документа', null=True, blank=True, max_length=150)
 
     # def file_link(self):
@@ -86,7 +86,7 @@ class Department_IA(User):
 
 class Grading(models.Model):
     # user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, primary_key=True)
-    student = models.ForeignKey(Student, null=True, blank=True, on_delete=models.SET_NULL)
+    student = models.ForeignKey(Student, null=True, blank=True, on_delete=models.SET_NULL, verbose_name='Ученик')
     # schools = models.ForeignKey(School, null=True, blank=True, on_delete=models.SET_NULL)
     # group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.SET_NULL)
     # lesson = models.ForeignKey(Lesson, null=True, blank=True, on_delete=models.SET_NULL)
