@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User, Student, Teacher, Department_IA, Grading
+from .models import User, Student, Teacher, Department_IA, Grading, StudentFile
 from django.contrib.auth.admin import UserAdmin
 
 admin.site.site_header = 'ALDIYAR-AVTO'
@@ -30,8 +30,12 @@ class UserAdmin(UserAdmin):
             return True
 
 
+class StudentFileAdmin(admin.StackedInline):
+    model = StudentFile
+
 @admin.register(Student)
 class StudentAdmin(UserAdmin):
+    inlines = [StudentFileAdmin]
     list_display = (
         'username', 'email', 'first_name', 'last_name', 'dob', 'category', 'study_category', 'start_training',
         'graduation_training',
@@ -39,8 +43,7 @@ class StudentAdmin(UserAdmin):
         'number_phone',
         'school',
         'group',
-        'file',
-        'title_file',
+
 
     )
     list_filter = ['study_category', 'category', 'school', 'group']
@@ -50,10 +53,8 @@ class StudentAdmin(UserAdmin):
             'username', 'first_name', 'last_name', 'id_passport', 'address', 'number_phone', 'group',
             'category',
             'study_category', 'start_training',
-            'graduation_training', 'file',
-            'title_file')}),
+            'graduation_training')}),
         (('Права доступа'), {'fields': ('is_active', 'is_staff', 'is_superuser')}),
-
     )
 
 
@@ -88,7 +89,6 @@ class StudentAdmin(UserAdmin):
         if not Student.objects.filter(username=request.user.username) and not Department_IA.objects.filter(
                 username=request.user.username):
             return True
-
 
 @admin.register(Teacher)
 class TeacherAdmin(UserAdmin):

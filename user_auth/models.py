@@ -45,7 +45,7 @@ class Teacher(User):
 
 
 
-FOLDER_FILES_PATH = 'static'
+
 class Student(User):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, primary_key=True)
     group = models.ForeignKey(Group, blank=True, null=True, on_delete=models.CASCADE, verbose_name='Учебный класс')
@@ -56,17 +56,10 @@ class Student(User):
     start_training = models.DateField('Начало обучение', null=True)
     graduation_training = models.DateField('Окончание обучение', null=True)
     # file = models.ForeignKey(StudentFile, null=True,blank=True, on_delete=models.CASCADE)
-    file = models.FileField('Документ',null=True, blank=True, default='default_post_image.jpg', upload_to='media/', )
-    title_file = models.CharField('Названия документа', null=True, blank=True, max_length=150)
+    # file = models.FileField('Документ',null=True, blank=True, default='default_post_image.jpg', upload_to='media/', )
+    # title_file = models.CharField('Названия документа', null=True, blank=True, max_length=150)
 
-    # def file_link(self):
-    #     print(self.file.open())
-    #     if self.file:
-    #         return "<a href='%s'>download</a>" % (self.file.url)
-    #     else:
-    #         return "No attachment"
 
-    # file_link.allow_tags = True
     def save(self, *args, **kwargs):
         if self.group:
             self.school = self.group.schools
@@ -75,8 +68,21 @@ class Student(User):
         verbose_name = 'Учащиеся'
         verbose_name_plural = 'Учащиеся'
 
+class StudentFile(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, verbose_name='Ученик')
+    title_file = models.CharField('Названия документа', null=True, blank=True, max_length=150)
+    file = models.FileField('Файл',null=True, blank=True, default='default_post_image.jpg', upload_to='media/' )
+
+    class Meta:
+        verbose_name = 'Документ'
+        verbose_name_plural = 'Документ'
+
+    def __str__(self):
+        return self.title_file
+
 class Department_IA(User):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, primary_key=True)
+
 
     class Meta:
         verbose_name = 'ГАИ/УВД'
