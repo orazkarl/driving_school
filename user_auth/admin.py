@@ -62,7 +62,7 @@ class StudentAdmin(UserAdmin):
         'group',
 
     )
-    # list_filter = ['study_category', 'category', 'school', 'group']
+    list_filter = ['study_category', 'category', 'school', 'group']
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
         (('Личная информация'), {'fields': (
