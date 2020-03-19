@@ -27,7 +27,7 @@ class GroupAdmin(admin.ModelAdmin):
 
 @admin.register(DrivingCategories)
 class DrivingCategoriesAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name']
+    list_display = ['name']
 
     def has_module_permission(self, request, obj=None):
         if not Student.objects.filter(username=request.user.username) and not Teacher.objects.filter(
