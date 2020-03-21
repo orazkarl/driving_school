@@ -117,6 +117,8 @@ class TeacherAdmin(UserAdmin):
     def has_module_permission(self, request, obj=None):
         if not Student.objects.filter(username=request.user.username):
             return True
+    def has_view_permission(self, request, obj=None):
+        return True
 
     def get_queryset(self, request):
         query_set = Teacher.objects.all()
@@ -216,7 +218,9 @@ class GradingAdmin(admin.ModelAdmin):
 
 
 from django.contrib.auth.models import Group
-
 admin.site.unregister(Group)
-# from django.contrib.admin.models import LogEntry
+
+from django.contrib.admin.models import LogEntry
 # LogEntry.objects.all().delete()
+
+
