@@ -10,13 +10,18 @@ class User(AbstractUser):
     last_name = models.CharField('Фамилия', max_length=150, null=True, blank=True)
     id_passport = models.PositiveIntegerField('ИИН', validators=[MaxValueValidator(999999999999)], null=True,
                                               blank=True, default=None)
-    number_passport = models.PositiveIntegerField('Номер пасспорта', validators=[MaxValueValidator(999999999)], null=True,
+    number_passport = models.PositiveIntegerField('Номер пасспорта', validators=[MaxValueValidator(999999999)],
+                                                  null=True,
                                                   blank=True, default=None)
     dob = models.DateField('Дата рожения', null=True, blank=True)
     place_of_birth = models.CharField('Место рождения', max_length=150, null=True, blank=True)
     address = models.CharField('Адрес', max_length=150, null=True, blank=True)
     number_phone = models.PositiveIntegerField('Номер телефона', null=True, blank=True)
     school = models.ForeignKey(School, null=True, blank=True, on_delete=models.SET_NULL, verbose_name='Школа')
+    is_staff = models.BooleanField('Статус персонала', default=True,
+                                   help_text='Отметьте, если пользователь может входить в административную часть сайта.')
+    is_superuser = models.BooleanField('Статус суперпользователя', default=True,
+                                       help_text='Указывает, что пользователь имеет все права без явного их назначения. ')
     USER_TYPE_CHOICES = (
         ('T', 'Учитель'),
         ('S', 'Ученик'),
@@ -29,7 +34,8 @@ class User(AbstractUser):
 
 
 class Teacher(User):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, primary_key=True, verbose_name='Учитель')
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, primary_key=True,
+                                verbose_name='Учитель')
 
     class Meta:
         verbose_name = 'Учителя'
@@ -44,34 +50,34 @@ class Teacher(User):
 #         return '%s, %s' % (self.file, self.title_file)
 
 
-
-
 class Student(User):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, primary_key=True)
     group = models.ForeignKey(Group, blank=True, null=True, on_delete=models.CASCADE, verbose_name='Учебный класс')
     category = models.ForeignKey(DrivingCategories, blank=True, null=True, on_delete=models.CASCADE,
-                                  verbose_name='Категория', related_name='category')
+                                 verbose_name='Категория', related_name='category')
     study_category = models.ForeignKey(DrivingCategories, blank=True, null=True, on_delete=models.CASCADE,
                                        verbose_name='Изучаемая категория', related_name='study_category')
-    start_training = models.DateField('Начало обучение', null=True)
-    graduation_training = models.DateField('Окончание обучение', null=True)
+    start_training = models.DateField('Начало обучение', null=True, blank=True)
+    graduation_training = models.DateField('Окончание обучение', null=True, blank=True)
+
     # file = models.ForeignKey(StudentFile, null=True,blank=True, on_delete=models.CASCADE)
     # file = models.FileField('Документ',null=True, blank=True, default='default_post_image.jpg', upload_to='media/', )
     # title_file = models.CharField('Названия документа', null=True, blank=True, max_length=150)
-
 
     def save(self, *args, **kwargs):
         if self.group:
             self.school = self.group.schools
         super().save(*args, **kwargs)
+
     class Meta:
         verbose_name = 'Учащиеся'
         verbose_name_plural = 'Учащиеся'
 
+
 class StudentFile(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE, verbose_name='Ученик')
     title_file = models.CharField('Названия документа', null=True, blank=True, max_length=150)
-    file = models.FileField('Файл',null=True, blank=True, default='default_post_image.jpg', upload_to='media/' )
+    file = models.FileField('Файл', null=True, blank=True, default='default_post_image.jpg', upload_to='media/')
 
     class Meta:
         verbose_name = 'Документ'
@@ -80,14 +86,13 @@ class StudentFile(models.Model):
     def __str__(self):
         return self.title_file
 
+
 class Department_IA(User):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, primary_key=True)
-
 
     class Meta:
         verbose_name = 'ГАИ/УВД'
         verbose_name_plural = 'ГАИ/УВД'
-
 
 
 class Grading(models.Model):
@@ -103,4 +108,3 @@ class Grading(models.Model):
     class Meta:
         verbose_name = 'Оценки'
         verbose_name_plural = 'Оценки'
-
