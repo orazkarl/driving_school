@@ -6,8 +6,8 @@ from driving_school import settings
 
 
 class User(AbstractUser):
-    first_name = models.CharField('Имя', max_length=150, null=True, blank=True)
-    last_name = models.CharField('Фамилия', max_length=150, null=True, blank=True)
+    name = models.CharField('ФИО', max_length=150, null=True, blank=True)
+    # last_name = models.CharField('Фамилия', max_length=150, null=True, blank=True)
     id_passport = models.PositiveIntegerField('ИИН', validators=[MaxValueValidator(999999999999)], null=True,
                                               blank=True, default=None)
     number_passport = models.PositiveIntegerField('Номер пасспорта', validators=[MaxValueValidator(999999999)],
@@ -30,7 +30,7 @@ class User(AbstractUser):
     # status = models.CharField('Статус', max_length=1, choices=USER_TYPE_CHOICES, default='S', blank=True, null=True)
 
     def __str__(self):
-        return '%s, %s' % (self.first_name, self.last_name)
+        return self.name
 
 
 class Teacher(User):

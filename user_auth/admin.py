@@ -10,7 +10,7 @@ class UserAdmin(UserAdmin):
     fieldsets = (
         (None, {'fields': ('username', 'email', 'password')}),
         (('Личная информация'), {'fields': (
-            'first_name', 'id_passport', 'number_passport', 'dob', 'place_of_birth', 'address',
+            'name', 'id_passport', 'number_passport', 'dob', 'place_of_birth', 'address',
             'number_phone',
             'school')}),
         (('Права доступа'), {'fields': ('is_active', 'is_staff', 'is_superuser',
@@ -19,7 +19,7 @@ class UserAdmin(UserAdmin):
     )
 
     list_display = (
-        'username', 'email', 'first_name', 'id_passport', 'number_passport', 'dob',
+        'username', 'email', 'name', 'id_passport', 'number_passport', 'dob',
         'place_of_birth', 'address',
         'number_phone',
         'school')
@@ -54,7 +54,7 @@ class StudentFileAdmin(admin.StackedInline):
 class StudentAdmin(UserAdmin):
     inlines = [StudentFileAdmin]
     list_display = (
-        'username', 'email', 'first_name', 'last_name', 'dob', 'id_passport','category', 'study_category', 'start_training',
+        'username', 'email', 'name',  'dob', 'id_passport','category', 'study_category', 'start_training',
         'graduation_training',
         'address',
         'number_phone',
@@ -66,7 +66,7 @@ class StudentAdmin(UserAdmin):
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
         (('Личная информация'), {'fields': (
-            'username', 'first_name', 'last_name', 'id_passport', 'address', 'number_phone', 'group',
+            'username', 'name',  'id_passport', 'address', 'number_phone', 'group',
             'category',
             'study_category', 'start_training',
             'graduation_training')}),
@@ -107,7 +107,7 @@ class StudentAdmin(UserAdmin):
 @admin.register(Teacher)
 class TeacherAdmin(UserAdmin):
     list_display = (
-        'username', 'email', 'first_name', 'last_name', 'id_passport', 'number_passport', 'dob',
+        'username', 'email', 'name',  'id_passport', 'number_passport', 'dob',
         'place_of_birth', 'address',
         'number_phone',
         'school')
@@ -144,12 +144,12 @@ class TeacherAdmin(UserAdmin):
 
 @admin.register(Department_IA)
 class DepartmentAdmin(UserAdmin):
-    list_display = ('username', 'email', 'first_name', 'address', 'is_active')
+    list_display = ('username', 'email', 'name', 'address', 'is_active')
 
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
         (('Личная информация'), {'fields': (
-            'username', 'first_name', 'address',)}),
+            'username', 'name', 'address',)}),
         (('Права доступа'), {'fields': ('is_active', 'is_staff', 'is_superuser')}),
 
     )
