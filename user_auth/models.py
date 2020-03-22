@@ -30,7 +30,7 @@ class User(AbstractUser):
     # status = models.CharField('Статус', max_length=1, choices=USER_TYPE_CHOICES, default='S', blank=True, null=True)
 
     def __str__(self):
-        return self.name
+        return '%s' % (self.name)
 
 
 class Teacher(User):
