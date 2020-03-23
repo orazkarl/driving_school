@@ -62,7 +62,13 @@ class StudentAdmin(UserAdmin):
         'group',
 
     )
-    list_filter = ['study_category', 'category', 'school', 'group']
+    # list_filter = ['study_category', 'category', 'school', 'group']
+    search_fields = ['username','name', 'id_passport']
+    def get_list_filter(self, request):
+        if not Student.objects.filter(username=request.user.username):
+            return ['study_category', 'category', 'school', 'group']
+        else:
+            return []
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
         (('Личная информация'), {'fields': (
@@ -112,10 +118,10 @@ class TeacherAdmin(UserAdmin):
         'number_phone',
         'school')
 
-    list_filter = ['school']
+    # list_filter = ['school']
 
     def has_module_permission(self, request, obj=None):
-        if not Student.objects.filter(username=request.user.username):
+        if not Student.objects.filter(username=request.user.username) and not Department_IA.objects.filter(username=request.user.username):
             return True
     def has_view_permission(self, request, obj=None):
         return True
@@ -156,15 +162,16 @@ class DepartmentAdmin(UserAdmin):
 
     def has_module_permission(self, request, obj=None):
         if not Student.objects.filter(username=request.user.username) and not Teacher.objects.filter(
-                username=request.user.username):
+                username=request.user.username) and not Department_IA.objects.filter(
+                username=request.user.username) :
             return True
 
-    def get_queryset(self, request):
-        query_set = Department_IA.objects.all()
-        if Department_IA.objects.filter(username=request.user.username):
-            query_set = Department_IA.objects.filter(username=request.user.username)
-            return query_set
-        return query_set
+    # def get_queryset(self, request):
+    #     query_set = Department_IA.objects.all()
+    #     if Department_IA.objects.filter(username=request.user.username):
+    #         query_set = Department_IA.objects.filter(username=request.user.username)
+    #         return query_set
+    #     return query_set
 
     def has_add_permission(self, request, obj=None):
         if not Student.objects.filter(username=request.user.username) and not Department_IA.objects.filter(
@@ -186,13 +193,19 @@ class DepartmentAdmin(UserAdmin):
 class GradingAdmin(admin.ModelAdmin):
     list_display = ('student', 'lesson_name', 'grade', 'date_of_grade')
 
-    list_filter = ['lesson_name', 'student']
+    # list_filter = ['lesson_name', 'student']
 
+    def get_list_filter(self, request):
+        if not Student.objects.filter(username=request.user.username):
+            return ['lesson_name', 'student']
+        else:
+            return []
     def get_queryset(self, request):
         query_set = Grading.objects.all()
         if Student.objects.filter(username=request.user.username):
             query_set = Grading.objects.filter(student=request.user)
             return query_set
+            list_filter = []
         return query_set
 
     def has_module_permission(self, request):

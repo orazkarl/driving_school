@@ -91,8 +91,8 @@ class Department_IA(User):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, primary_key=True)
 
     class Meta:
-        verbose_name = 'ГАИ/УВД'
-        verbose_name_plural = 'ГАИ/УВД'
+        verbose_name = 'Адм. Пол. Спец. Цон.'
+        verbose_name_plural = 'Адм. Пол. Спец. Цон.'
 
 
 class Grading(models.Model):
