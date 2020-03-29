@@ -8,15 +8,14 @@ from driving_school import settings
 class User(AbstractUser):
     name = models.CharField('ФИО', max_length=150, null=True, blank=True)
     # last_name = models.CharField('Фамилия', max_length=150, null=True, blank=True)
-    id_passport = models.PositiveIntegerField('ИИН', validators=[MaxValueValidator(999999999999)], null=True,
-                                              blank=True, default=None)
+    id_passport = models.CharField('ИИН', max_length=12, null=True, blank=True, default=None)
     number_passport = models.PositiveIntegerField('Номер пасспорта', validators=[MaxValueValidator(999999999)],
                                                   null=True,
                                                   blank=True, default=None)
     dob = models.DateField('Дата рожения', null=True, blank=True)
     place_of_birth = models.CharField('Место рождения', max_length=150, null=True, blank=True)
     address = models.CharField('Адрес', max_length=150, null=True, blank=True)
-    number_phone = models.PositiveIntegerField('Номер телефона', null=True, blank=True)
+    number_phone = models.CharField('Номер телефона', null=True, blank=True, max_length=50)
     school = models.ForeignKey(School, null=True, blank=True, on_delete=models.SET_NULL, verbose_name='Школа')
     is_staff = models.BooleanField('Статус персонала', default=True,
                                    help_text='Отметьте, если пользователь может входить в административную часть сайта.')
@@ -57,8 +56,8 @@ class Student(User):
                                  verbose_name='Категория', related_name='category')
     study_category = models.ForeignKey(DrivingCategories, blank=True, null=True, on_delete=models.CASCADE,
                                        verbose_name='Изучаемая категория', related_name='study_category')
-    start_training = models.DateField('Начало обучение', null=True, blank=True)
-    graduation_training = models.DateField('Окончание обучение', null=True, blank=True)
+    start_training = models.DateField('Начало', null=True, blank=True)
+    graduation_training = models.DateField('Окончание', null=True, blank=True)
 
     # file = models.ForeignKey(StudentFile, null=True,blank=True, on_delete=models.CASCADE)
     # file = models.FileField('Документ',null=True, blank=True, default='default_post_image.jpg', upload_to='media/', )

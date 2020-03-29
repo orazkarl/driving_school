@@ -8,7 +8,7 @@ admin.site.site_header = 'ALDIYAR-AVTO'
 # @admin.register(User)
 class UserAdmin(UserAdmin):
     fieldsets = (
-        (None, {'fields': ('username', 'email', 'password')}),
+        (None, {'fields': ('username',  'password')}),
         (('Личная информация'), {'fields': (
             'name', 'id_passport', 'number_passport', 'dob', 'place_of_birth', 'address',
             'number_phone',
@@ -19,7 +19,7 @@ class UserAdmin(UserAdmin):
     )
 
     list_display = (
-        'username', 'email', 'name', 'id_passport', 'number_passport', 'dob',
+        'username',  'name', 'id_passport', 'number_passport', 'dob',
         'place_of_birth', 'address',
         'number_phone',
         'school')
@@ -54,12 +54,11 @@ class StudentFileAdmin(admin.StackedInline):
 class StudentAdmin(UserAdmin):
     inlines = [StudentFileAdmin]
     list_display = (
-        'username', 'email', 'name',  'dob', 'id_passport','category', 'study_category', 'start_training',
+        'username',  'name',  'dob', 'id_passport','category', 'study_category', 'start_training',
         'graduation_training',
-        'address',
         'number_phone',
         'school',
-        'group',
+
 
     )
     # list_filter = ['study_category', 'category', 'school', 'group']
@@ -70,9 +69,9 @@ class StudentAdmin(UserAdmin):
         else:
             return []
     fieldsets = (
-        (None, {'fields': ('email', 'password')}),
+        (None, {'fields': ('username', 'password')}),
         (('Личная информация'), {'fields': (
-            'username', 'name',  'id_passport', 'address', 'number_phone', 'group',
+             'name',  'id_passport', 'address', 'number_phone', 'group',
             'category',
             'study_category', 'start_training',
             'graduation_training')}),
@@ -113,7 +112,7 @@ class StudentAdmin(UserAdmin):
 @admin.register(Teacher)
 class TeacherAdmin(UserAdmin):
     list_display = (
-        'username', 'email', 'name',  'id_passport', 'number_passport', 'dob',
+        'username',  'name',  'id_passport', 'number_passport', 'dob',
         'place_of_birth', 'address',
         'number_phone',
         'school')
@@ -150,12 +149,12 @@ class TeacherAdmin(UserAdmin):
 
 @admin.register(Department_IA)
 class DepartmentAdmin(UserAdmin):
-    list_display = ('username', 'email', 'name', 'address', 'is_active')
+    list_display = ('username',  'name', 'address', 'is_active')
 
     fieldsets = (
-        (None, {'fields': ('email', 'password')}),
+        (None, {'fields': ('username', 'password')}),
         (('Личная информация'), {'fields': (
-            'username', 'name', 'address',)}),
+             'name', 'address',)}),
         (('Права доступа'), {'fields': ('is_active', 'is_staff', 'is_superuser')}),
 
     )
