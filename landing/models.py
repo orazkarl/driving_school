@@ -8,6 +8,7 @@ from django.contrib import messages
 
 # Create your models here.
 
+
 class School(models.Model):
     name = models.CharField('Название', max_length=100, null=True, blank=True)
     address = models.CharField('Адрес', max_length=100, null=True, blank=True)
