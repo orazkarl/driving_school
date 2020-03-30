@@ -10,7 +10,7 @@ class UserAdmin(UserAdmin):
     fieldsets = (
         (None, {'fields': ('username',  'password')}),
         (('Личная информация'), {'fields': (
-            'name', 'id_passport', 'number_passport', 'dob', 'place_of_birth', 'address',
+            'name', 'id_passport', 'number_passport',   'address',
             'number_phone',
             'school')}),
         (('Права доступа'), {'fields': ('is_active', 'is_staff', 'is_superuser',
@@ -19,8 +19,8 @@ class UserAdmin(UserAdmin):
     )
 
     list_display = (
-        'username',  'name', 'id_passport', 'number_passport', 'dob',
-        'place_of_birth', 'address',
+        'username',  'name', 'id_passport', 'number_passport',
+         'address',
         'number_phone',
         'school')
 
@@ -54,15 +54,15 @@ class StudentFileAdmin(admin.StackedInline):
 class StudentAdmin(UserAdmin):
     inlines = [StudentFileAdmin]
     list_display = (
-        'username',  'name',  'dob', 'id_passport','category', 'study_category', 'start_training',
+        'username',  'name',   'id_passport','category', 'study_category', 'start_training',
         'graduation_training',
         'number_phone',
         'school',
-
-
     )
+    ordering = ('-name',)
     # list_filter = ['study_category', 'category', 'school', 'group']
     search_fields = ['username','name', 'id_passport']
+
     def get_list_filter(self, request):
         if not Student.objects.filter(username=request.user.username):
             return ['study_category', 'category', 'school', 'group']
@@ -112,8 +112,8 @@ class StudentAdmin(UserAdmin):
 @admin.register(Teacher)
 class TeacherAdmin(UserAdmin):
     list_display = (
-        'username',  'name',  'id_passport', 'number_passport', 'dob',
-        'place_of_birth', 'address',
+        'username',  'name',  'id_passport', 'number_passport',
+         'address',
         'number_phone',
         'school')
 

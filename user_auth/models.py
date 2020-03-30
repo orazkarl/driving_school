@@ -12,7 +12,7 @@ class User(AbstractUser):
     number_passport = models.PositiveIntegerField('Номер пасспорта', validators=[MaxValueValidator(999999999)],
                                                   null=True,
                                                   blank=True, default=None)
-    dob = models.DateField('Дата рожения', null=True, blank=True)
+    # dob = models.DateField('Дата рожения', null=True, blank=True)
     place_of_birth = models.CharField('Место рождения', max_length=150, null=True, blank=True)
     address = models.CharField('Адрес', max_length=150, null=True, blank=True)
     number_phone = models.CharField('Номер телефона', null=True, blank=True, max_length=50)
@@ -30,6 +30,7 @@ class User(AbstractUser):
 
     def __str__(self):
         return '%s' % (self.name)
+
 
 
 class Teacher(User):
@@ -91,7 +92,7 @@ class Department_IA(User):
 
     class Meta:
         verbose_name = 'Адм. Пол. - Спец. Цон.'
-        verbose_name_plural = 'Адм. Пол. Спец. Цон.'
+        verbose_name_plural = 'Адм. Пол. - Спец. Цон.'
 
 
 class Grading(models.Model):
